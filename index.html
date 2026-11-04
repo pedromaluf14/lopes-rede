@@ -81,7 +81,8 @@ button,input,select{ font:inherit; color:inherit; }
 .pill-select{ font-size:13px; font-weight:500; padding:9px 36px 9px 16px; border-radius:8px; border:1px solid var(--line-2); background-color:rgba(255,255,255,.05); color:#fff; cursor:pointer;
   -webkit-backdrop-filter:blur(14px); backdrop-filter:blur(14px); appearance:none; -webkit-appearance:none;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23C2C2CA' stroke-width='1.6' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 15px center; }
-.pill-select option{ background:#18181B; color:#fff; }
+.pill-select option{ background:#18181B; color:#fff; font-style:normal; font-weight:500; }
+.pill-select optgroup{ background:#0D0D0E; color:#85858F; font-style:normal; font-weight:600; font-size:11px; letter-spacing:.08em; }
 .seg{ display:flex; gap:6px; flex-wrap:wrap; }
 .seg-btn{ border:1px solid var(--line-2); background:rgba(255,255,255,.04); color:var(--ink-soft); font-weight:500; font-size:12.5px; padding:8px 15px; border-radius:8px; cursor:pointer; white-space:nowrap; -webkit-backdrop-filter:blur(14px); backdrop-filter:blur(14px); }
 .seg-btn:hover{ color:#fff; border-color:rgba(255,255,255,.25); }
@@ -306,6 +307,7 @@ footer{ display:flex; justify-content:space-between; flex-wrap:wrap; gap:6px; fo
 [data-mode="light"] .hero-title .soft{ color:rgba(20,18,20,.36); }
 [data-mode="light"] .pill-select{ background-color:#fff; color:var(--ink); }
 [data-mode="light"] .pill-select option{ background:#fff; color:var(--ink); }
+[data-mode="light"] .pill-select optgroup{ background:#F4F2F3; color:#85848A; }
 [data-mode="light"] .seg-btn{ background:#fff; }
 [data-mode="light"] .seg-btn:hover,[data-mode="light"] .clear-btn:hover{ color:var(--ink); border-color:rgba(20,18,20,.3); }
 [data-mode="light"] .clear-btn{ background:#fff; }
@@ -1014,8 +1016,8 @@ function init(data){
   const live=ACC.today.spend>0; $('#ro-status').textContent=live?'● veiculando':'sem gasto hoje'; $('#ro-status').classList.toggle('ok',live);
 
   $('#vg-product').innerHTML='<option value="all">Todos os conjuntos</option>'
-    +'<optgroup label="Ativos">'+prods.slice().sort((a,b)=>a.label.localeCompare(b.label,'pt-BR')).map(p=>`<option value="${p.id}">${esc(p.label)}</option>`).join('')+'</optgroup>'
-    +(ended.length?'<optgroup label="Encerrados">'+ended.map(p=>`<option value="${p.id}">${esc(p.label)}</option>`).join('')+'</optgroup>':'');
+    +'<optgroup label="ATIVOS">'+prods.slice().sort((a,b)=>a.label.localeCompare(b.label,'pt-BR')).map(p=>`<option value="${p.id}">${esc(p.label)}</option>`).join('')+'</optgroup>'
+    +(ended.length?'<optgroup label="ENCERRADOS">'+ended.map(p=>`<option value="${p.id}">${esc(p.label)} (encerrado)</option>`).join('')+'</optgroup>':'');
   $('#vg-product').addEventListener('change',ev=>{ vgProduct=ev.target.value; renderVG(); });
   $$('#vg-periods .seg-btn').forEach(b=>b.addEventListener('click',()=>{ vgPeriod=b.dataset.p; $$('#vg-periods .seg-btn').forEach(x=>x.classList.toggle('active',x===b)); $('#vg-custom').hidden=vgPeriod!=='custom'; renderVG(); }));
   const from=$('#vg-from'), to=$('#vg-to'); [from,to].forEach(i=>{ i.min=DATA_START; i.max=Y; }); from.value=vgRange[0]; to.value=vgRange[1];
