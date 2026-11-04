@@ -1346,7 +1346,7 @@
     const box = document.getElementById('crmFunnel');
     const sub = document.getElementById('crmSub');
     const statusEl = document.getElementById('crmStatus');
-    const meta = computeTotals(OVERVIEW.map(p=>p.slug), from, to);
+    const meta = sumTotals(OVERVIEW.map(p=>p.slug), from, to); // {spend, leads, ...} da conta inteira
     sub.textContent = periodLabel.split(' · ')[0] + ' · leads que entraram no RD no período e até onde chegaram'
       + (filtered ? ' · funil da conta inteira (o RD não registra o conjunto do lead)' : '');
     const c = crmTotals(from, to);
@@ -1360,10 +1360,10 @@
         cls: lab==='Venda' ? 'won' : '' })));
     const max = Math.max(1, ...rows.map(r=>r.v));
     const pctTxt = (a,b) => b>0 ? (100*a/b).toLocaleString('pt-BR', {maximumFractionDigits:1}) + '%' : '—';
-    box.innerHTML = '<div class="crm-head"><span>Etapa</span><span></span><span>Qtd.</span><span>Conversão</span><span>Custo por</span></div>' +
+    box.innerHTML = '<div class="crm-head"><span>Etapa</span><span></span><span>Qtd.</span><span>% da anterior</span><span>Custo por etapa</span></div>' +
       rows.map((r, i) => {
         const prev = i>0 ? rows[i-1].v : null;
-        const conv = i===0 ? '<span style="color:var(--muted)">—</span>' : `<b>${pctTxt(r.v, prev)}</b> da anterior`;
+        const conv = i===0 || !prev ? '<span style="color:var(--muted)">—</span>' : `<b>${pctTxt(r.v, prev)}</b>`;
         const cost = r.v>0 ? BRL(meta.spend / r.v) : '—';
         return `<div class="crm-row ${r.cls}${r.v ? '' : ' zero'}">
           <div class="l">${r.label}${r.note ? `<small>${r.note}</small>` : ''}</div>
