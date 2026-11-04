@@ -14,7 +14,7 @@ Formato de saída (lido pelo index.html):
   "account": {"name", "spendCap", "amountSpent", "balance"},   # em reais
   "daily": {"<campanha>": {"AAAA-MM-DD": [spend, impr, clicks, leads], ...}},
   "reach": {"last7"|"prev7"|"month": {"account": n, "campaigns": {"<campanha>": n}}},
-  "breakdown": {"last7"|"month": {"gender": {...}, "age": {...}}},      # leads, conta inteira
+  "breakdown": {"last7"|"month": {"gender", "age", "platform", "device"}},  # leads, conta inteira
   "budgets": {"<conjunto>": {"type": "ABO", "daily": reais, "adsets": 1}},
   "topAds": [{"campaign", "name", "leads", "spend", "link", "thumb"}],  # últimos 7 dias, conta inteira
   "adsByCampaign": {"last7"|"month": {"<campanha>": [mesmo formato de topAds]}}  # melhores de cada campanha
@@ -146,7 +146,13 @@ def main() -> int:
                 leads = int(n(r.get(LEAD_FIELD)))
                 g[r.get("gender") or "unknown"] += leads
                 a[r.get("age") or "unknown"] += leads
-            breakdown[key] = {"gender": dict(g), "age": dict(a)}
+            rows = windsor(api_key, ["publisher_platform", "device_platform", LEAD_FIELD], frm, to)
+            pl, dv = defaultdict(int), defaultdict(int)
+            for r in rows:
+                leads = int(n(r.get(LEAD_FIELD)))
+                pl[r.get("publisher_platform") or "unknown"] += leads
+                dv[r.get("device_platform") or "unknown"] += leads
+            breakdown[key] = {"gender": dict(g), "age": dict(a), "platform": dict(pl), "device": dict(dv)}
 
 
         # Orçamento diário atual de cada conjunto (campanha ABO). Valores do Meta vêm em centavos.

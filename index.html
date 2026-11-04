@@ -193,28 +193,38 @@ button,input,select{ font:inherit; color:inherit; }
 .dleg .sw{ width:8px; height:8px; border-radius:1px; flex:none; }
 .dleg .pct{ margin-left:auto; font-family:var(--mono); color:var(--ink); }
 
-/* funil comercial (Meta + RD Station CRM) */
-.cf-head, .cf li{ display:grid; grid-template-columns:minmax(130px,170px) minmax(0,1fr) 64px 108px 116px; gap:14px; align-items:center; }
-.cf-head{ font-size:10.5px; letter-spacing:.12em; color:var(--muted); padding:0 8px 8px; }
-.cf-head span:nth-child(n+3){ text-align:right; }
-.cf{ list-style:none; margin:0; padding:0; }
-.cf li{ padding:11px 8px; }
-.cf li + li{ border-top:1px solid var(--line); }
-.cf-name{ font-weight:500; font-size:14px; line-height:1.25; }
-.cf-name small{ display:block; font-size:11px; color:var(--muted); font-weight:400; }
-.cf-bar{ height:6px; background:var(--card-3); border-radius:1px; overflow:hidden; }
-.cf-bar span{ display:block; height:100%; background:#6A6A6E; min-width:2px; transition:width .35s ease; }
-.cf li.meta .cf-bar span{ background:var(--wine); }
-.cf li.rd .cf-bar span{ background:var(--pink); }
-.cf li.won .cf-bar span{ background:var(--good); }
-.cf-n{ font-family:var(--mono); font-size:16px; text-align:right; }
-.cf li.zero .cf-n{ color:var(--muted); }
-.cf-p, .cf-c{ font-family:var(--mono); font-size:13px; text-align:right; color:var(--ink-soft); }
+/* funis (mídia e comercial): blocos empilhados com a conversão entre eles */
+.vf{ display:flex; flex-direction:column; align-items:center; justify-content:center; }
+.vf-step{ width:100%; border-radius:10px; padding:11px 16px; display:flex; align-items:center; justify-content:space-between; gap:12px;
+  background:var(--wine); color:#fff; transition:width .35s ease; }
+.vf-step + .vf-gap{ }
+.vf-step .l{ font-weight:600; font-size:13.5px; line-height:1.2; min-width:0; }
+.vf-step .l small{ display:block; font-weight:400; font-size:11px; opacity:.78; margin-top:2px; }
+.vf-step .v{ font-family:var(--mono); font-size:18px; font-weight:500; white-space:nowrap; }
+.vf-step.zero{ background:var(--card-3) !important; color:var(--muted); }
+.vf-step.won{ background:#16774C; }
+.vf-gap{ display:flex; justify-content:center; margin:-8px 0; position:relative; z-index:2; height:24px; align-items:center; }
+.vf-gap span{ background:var(--card); border:1px solid var(--line-2); color:var(--ink); font-family:var(--mono); font-size:11px; padding:2px 10px; border-radius:999px; white-space:nowrap; }
+.vf-gap span.none{ color:var(--muted); }
+.vf.taper .vf-step{ width:calc(100% - var(--i) * 6%); }
+.sec{ display:grid; grid-template-columns:minmax(0,1.25fr) minmax(0,1fr); gap:14px; align-items:stretch; }
+.sec-tiles{ display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; }
+.tile{ background:var(--card-2); border:1px solid var(--line); border-radius:10px; padding:14px 16px; display:flex; flex-direction:column; justify-content:center; gap:6px; min-width:0; }
+.tile .l{ font-size:10.5px; letter-spacing:.12em; color:var(--muted); }
+.tile .v{ font-size:22px; font-weight:500; letter-spacing:-.02em; }
+.crm-grid{ display:grid; grid-template-columns:minmax(0,1.7fr) minmax(0,1fr); gap:22px; align-items:center; }
+.crm-side{ background:var(--card-2); border:1px solid var(--line); border-radius:12px; padding:16px 18px; }
+.crm-side-h{ font-size:10.5px; letter-spacing:.12em; color:var(--muted); margin-bottom:8px; display:block; }
+.donuts.four{ grid-template-columns:repeat(4,minmax(0,1fr)); }
+.p-sep{ font-size:10.5px; letter-spacing:.12em; color:var(--muted); padding:14px 12px 6px; border-top:1px solid var(--line); margin-top:4px; }
+.pitem .pi-name .on{ display:inline-block; width:6px; height:6px; border-radius:1px; background:var(--good); margin-right:7px; vertical-align:2px; }
+.pitem.ended{ opacity:.62; } .pitem.ended:hover, .pitem.ended.sel{ opacity:1; }
+.pitem.ended .r-tag{ margin-left:6px; }
+@media (max-width:900px){ .sec, .crm-grid{ grid-template-columns:1fr; } .donuts.four{ grid-template-columns:1fr 1fr; } }
 @media (max-width:640px){
-  .cf-head{ display:none; }
-  .cf li{ grid-template-columns:minmax(0,1fr) auto; grid-template-areas:"n v" "b b" "p c"; gap:6px 10px; }
-  .cf-name{ grid-area:n; } .cf-n{ grid-area:v; } .cf-bar{ grid-area:b; }
-  .cf-p{ grid-area:p; text-align:left; } .cf-c{ grid-area:c; }
+  .sec-tiles{ grid-template-columns:1fr 1fr 1fr; gap:8px; } .tile{ padding:12px; } .tile .v{ font-size:17px; }
+  .vf.taper .vf-step{ width:calc(100% - var(--i) * 3%); }
+  .vf-step{ padding:10px 13px; } .vf-step .v{ font-size:16px; }
 }
 
 /* engajamento */
@@ -445,11 +455,35 @@ footer{ display:flex; justify-content:space-between; flex-wrap:wrap; gap:6px; fo
       <svg id="vg-chart" class="chart" role="img" aria-label="Leads por dia"></svg>
     </section>
 
+    <section class="card">
+      <div class="card-h"><span class="ico"><svg viewBox="0 0 24 24"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg></span>
+        <div><h2>Do anúncio ao lead</h2><span class="card-sub" id="vg-sec-sub"></span></div></div>
+      <div class="sec">
+          <div class="sec-tiles">
+            <div class="tile"><span class="l mono">CPM <span class="help" tabindex="0" role="note" aria-label="Custo para aparecer mil vezes: investimento ÷ impressões × 1.000." data-tip="Custo para aparecer mil vezes: investimento ÷ impressões × 1.000.">?</span></span><span class="v mono" id="vg-cpm">—</span><span class="delta" id="vg-cpm-d"></span></div>
+            <div class="tile"><span class="l mono">CPC LINK <span class="help" tabindex="0" role="note" aria-label="Custo por clique no link: investimento ÷ cliques no link." data-tip="Custo por clique no link: investimento ÷ cliques no link.">?</span></span><span class="v mono" id="vg-cpc">—</span><span class="delta" id="vg-cpc-d"></span></div>
+            <div class="tile"><span class="l mono">CTR LINK <span class="help" tabindex="0" role="note" aria-label="De cada 100 pessoas que viram o anúncio, quantas clicaram no link." data-tip="De cada 100 pessoas que viram o anúncio, quantas clicaram no link.">?</span></span><span class="v mono" id="vg-ctr">—</span><span class="delta" id="vg-ctr-d"></span></div>
+          </div>
+          <div class="vf" id="vg-vf"></div>
+        </div>
+    </section>
+
     <section class="card vg-all" id="crm">
       <div class="card-h"><span class="ico"><svg viewBox="0 0 24 24"><path d="M3 5h18l-7 8v6l-4-2v-4z"/></svg></span>
         <div><h2>Funil comercial</h2><span class="card-sub" id="crm-sub"></span></div></div>
-      <div class="cf-head mono"><span>ETAPA</span><span></span><span>QTD.</span><span>% DA ANTERIOR</span><span>CUSTO POR ETAPA</span></div>
-      <ol class="cf" id="crm-funnel"></ol>
+      <div class="crm-grid">
+        <div class="vf taper" id="crm-funnel"></div>
+        <aside class="crm-side eng">
+          <span class="crm-side-h mono" id="st-sub">SITUAÇÃO HOJE NO RD</span>
+          <div class="eng-big"><span class="v mono" id="st-open">—</span><span class="l">em andamento <span class="help" tabindex="0" role="note" aria-label="Leads que entraram no RD no período e ainda estão em aberto em alguma etapa do funil." data-tip="Leads que entraram no RD no período e ainda estão em aberto em alguma etapa do funil.">?</span></span></div>
+          <dl class="eng-list">
+            <div><dt>Perdidos</dt><dd class="mono" id="st-lost">—</dd></div>
+            <div><dt>Ganhos</dt><dd class="mono" id="st-won">—</dd></div>
+            <div><dt>Passaram da qualificação</dt><dd class="mono" id="st-adv">—</dd></div>
+            <div><dt>Custo por VP realizada</dt><dd class="mono" id="st-cvp">—</dd></div>
+          </dl>
+        </aside>
+      </div>
       <p class="ads-note" id="crm-note"></p>
     </section>
 
@@ -466,26 +500,16 @@ footer{ display:flex; justify-content:space-between; flex-wrap:wrap; gap:6px; fo
       <div class="ads-grid" id="ads-grid"></div>
     </section>
 
-    <div class="two vg-all">
-      <section class="card">
-        <div class="card-h"><span class="ico"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7M18 14c2 .6 3 2.8 3 6"/></svg></span>
-          <div><h2>Quem virou lead</h2><span class="card-sub" id="who-sub">Últimos 7 dias</span></div></div>
-        <div class="donuts">
-          <div class="dpanel"><h3 class="mono">GÊNERO</h3><svg viewBox="0 0 120 120" class="donut" id="d-gender"></svg><div class="dleg" id="l-gender"></div></div>
-          <div class="dpanel"><h3 class="mono">IDADE</h3><svg viewBox="0 0 120 120" class="donut" id="d-age"></svg><div class="dleg" id="l-age"></div></div>
-        </div>
-      </section>
-      <section class="card eng">
-        <div class="card-h"><span class="ico"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h10M4 18h6"/></svg></span>
-          <div><h2>Onde estão os leads</h2><span class="card-sub" id="st-sub">Situação hoje no RD Station CRM</span></div></div>
-        <div class="eng-big"><span class="v mono" id="st-open">—</span><span class="l">em andamento <span class="help" tabindex="0" role="note" aria-label="Leads que entraram no RD no período e ainda estão em aberto em alguma etapa do funil." data-tip="Leads que entraram no RD no período e ainda estão em aberto em alguma etapa do funil.">?</span></span></div>
-        <dl class="eng-list">
-          <div><dt>Perdidos</dt><dd class="mono" id="st-lost">—</dd></div>
-          <div><dt>Ganhos</dt><dd class="mono" id="st-won">—</dd></div>
-          <div><dt>Passaram da qualificação</dt><dd class="mono" id="st-adv">—</dd></div>
-        </dl>
-      </section>
-    </div>
+    <section class="card vg-all">
+      <div class="card-h"><span class="ico"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7M18 14c2 .6 3 2.8 3 6"/></svg></span>
+        <div><h2>Quem virou lead</h2><span class="card-sub" id="who-sub">Últimos 7 dias</span></div></div>
+      <div class="donuts four">
+        <div class="dpanel"><h3 class="mono">GÊNERO</h3><svg viewBox="0 0 120 120" class="donut" id="d-gender"></svg><div class="dleg" id="l-gender"></div></div>
+        <div class="dpanel"><h3 class="mono">IDADE</h3><svg viewBox="0 0 120 120" class="donut" id="d-age"></svg><div class="dleg" id="l-age"></div></div>
+        <div class="dpanel"><h3 class="mono">PLATAFORMA</h3><svg viewBox="0 0 120 120" class="donut" id="d-platform"></svg><div class="dleg" id="l-platform"></div></div>
+        <div class="dpanel"><h3 class="mono">DISPOSITIVO</h3><svg viewBox="0 0 120 120" class="donut" id="d-device"></svg><div class="dleg" id="l-device"></div></div>
+      </div>
+    </section>
   </div>
 
   <!-- ===== CONJUNTOS ===== -->
@@ -495,12 +519,25 @@ footer{ display:flex; justify-content:space-between; flex-wrap:wrap; gap:6px; fo
       <h1 class="hero-title sm">Cada conjunto,<br><span class="soft">em detalhe.</span></h1>
       <label class="search glass"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
         <input id="p-search" type="search" placeholder="Buscar conjunto" aria-label="Buscar conjunto"></label>
-      <label class="cmp-toggle" title="Compara com os 7 dias imediatamente anteriores, como o “Comparar” do Gerenciador de Anúncios"><input type="checkbox" class="cmp-input" checked> Comparar com 7 dias anteriores</label>
+      <div class="filter-row">
+        <div class="seg" id="p-periods">
+          <button type="button" class="seg-btn active" data-p="cur" title="Os 7 dias completos mais recentes. O dia de hoje não entra.">Últimos 7 dias</button>
+          <button type="button" class="seg-btn" data-p="month" title="Do dia 1 até ontem. O dia de hoje não entra.">Este mês</button>
+          <button type="button" class="seg-btn" data-p="last" title="O mês anterior inteiro, comparado com o mês antes dele.">Mês passado</button>
+          <button type="button" class="seg-btn" data-p="custom">Personalizado</button>
+        </div>
+        <span class="custom-period" id="p-custom" hidden>
+          <input type="date" id="p-from" class="datebox" aria-label="De">
+          <span class="to mono">até</span>
+          <input type="date" id="p-to" class="datebox" aria-label="Até">
+        </span>
+        <label class="cmp-toggle" title="Compara com o período imediatamente anterior, como o “Comparar” do Gerenciador de Anúncios"><input type="checkbox" class="cmp-input" checked> Comparar com período anterior</label>
+      </div>
     </section>
     <div class="prod-layout">
       <aside class="p-list" id="p-list"></aside>
       <section class="prod-detail" aria-live="polite" id="p-detail">
-        <div class="pd-head"><span class="tag mono"><span class="v">7 DIAS</span><span id="pd-camps"></span></span><h2 id="pd-name"></h2></div>
+        <div class="pd-head"><span class="tag mono"><span class="v" id="pd-per">7 DIAS</span><span id="pd-camps"></span></span><h2 id="pd-name"></h2></div>
         <div class="kpis">
           <div class="kpi card"><span class="label mono">LEADS</span><span class="value mono grad" id="pd-leads"></span><span class="delta" id="pd-leads-d"></span></div>
           <div class="kpi card"><span class="label mono">INVESTIMENTO</span><span class="value mono" id="pd-spend"></span><span class="delta" id="pd-spend-d"></span></div>
@@ -514,16 +551,19 @@ footer{ display:flex; justify-content:space-between; flex-wrap:wrap; gap:6px; fo
         </section>
         <section class="card">
           <div class="card-h"><span class="ico"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M10 9l5 2.5-5 2.5z"/><path d="M8 21h8"/></svg></span>
-            <div><h2>Criativos que mais converteram</h2><span class="card-sub">Últimos 7 dias · o mesmo anúncio em públicos diferentes aparece somado</span></div></div>
+            <div><h2>Criativos que mais converteram</h2><span class="card-sub" id="pd-ads-sub">Últimos 7 dias · o mesmo anúncio em públicos diferentes aparece somado</span></div></div>
           <div class="ads-grid" id="pd-ads"></div>
         </section>
         <section class="card">
-          <div class="card-h"><span class="ico"><svg viewBox="0 0 24 24"><path d="M3 5h18l-7 8v6l-4-2v-4z"/></svg></span><div><h2>Do anúncio ao lead</h2></div></div>
-          <div class="funnel">
-            <div class="f-step"><span class="l mono">IMPRESSÕES</span><span class="v mono" id="pd-f-impr"></span></div>
-            <div class="f-step"><span class="l mono">CLIQUES NO LINK</span><span class="v mono" id="pd-f-clicks"></span><span class="r" id="pd-f-p1"></span></div>
-            <div class="f-step final"><span class="l mono">LEADS</span><span class="v mono" id="pd-f-leads"></span><span class="r" id="pd-f-p2"></span></div>
+          <div class="card-h"><span class="ico"><svg viewBox="0 0 24 24"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg></span><div><h2>Do anúncio ao lead</h2><span class="card-sub" id="pd-sec-sub"></span></div></div>
+          <div class="sec">
+          <div class="sec-tiles">
+            <div class="tile"><span class="l mono">CPM <span class="help" tabindex="0" role="note" aria-label="Custo para aparecer mil vezes: investimento ÷ impressões × 1.000." data-tip="Custo para aparecer mil vezes: investimento ÷ impressões × 1.000.">?</span></span><span class="v mono" id="pd-cpm">—</span><span class="delta" id="pd-cpm-d"></span></div>
+            <div class="tile"><span class="l mono">CPC LINK <span class="help" tabindex="0" role="note" aria-label="Custo por clique no link: investimento ÷ cliques no link." data-tip="Custo por clique no link: investimento ÷ cliques no link.">?</span></span><span class="v mono" id="pd-cpc">—</span><span class="delta" id="pd-cpc-d"></span></div>
+            <div class="tile"><span class="l mono">CTR LINK <span class="help" tabindex="0" role="note" aria-label="De cada 100 pessoas que viram o anúncio, quantas clicaram no link." data-tip="De cada 100 pessoas que viram o anúncio, quantas clicaram no link.">?</span></span><span class="v mono" id="pd-ctr">—</span><span class="delta" id="pd-ctr-d"></span></div>
           </div>
+          <div class="vf" id="pd-vf"></div>
+        </div>
         </section>
       </section>
     </div>
@@ -583,8 +623,8 @@ const leadsTxt = n => int(n)+(n===1?' lead':' leads');
 function prettyName(c){ return String(c).replace(/^Imobiliárias\//,'').trim()||c; }
 
 /* =============== estado =============== */
-let M, T, Y, L7, P7, MON, MONP, ACC, prods=[], ended=[], ents=[], byId={}, HL=[];
-let vgPeriod='cur', vgProduct='all', vgRange=null, cmpOn=true, rankAll=false, pSel=null, pSearch='';
+let M, T, Y, L7, P7, MON, MONP, LM, LMP, ACC, prods=[], ended=[], ents=[], byId={}, HL=[];
+let vgPeriod='cur', vgProduct='all', vgRange=null, cmpOn=true, rankAll=false, pSel=null, pSearch='', pPeriod='cur', pRange=null;
 
 function agg(camps,a,b){ const r={spend:0,impr:0,clicks:0,leads:0}; if (!a) return null;
   for (const c of camps){ const dd=M.daily[c]; if (!dd) continue;
@@ -601,6 +641,9 @@ function setup(){
   const pm = mm===1 ? [yy-1,12] : [yy,mm-1], pmDays = new Date(Date.UTC(pm[0],pm[1],0)).getUTCDate();
   const pmStart = `${pm[0]}-${String(pm[1]).padStart(2,'0')}-01`;
   MONP = [pmStart, `${pmStart.slice(0,8)}${String(Math.min(dd,pmDays)).padStart(2,'0')}`];
+  /* Mês passado: o mês anterior ao de hoje, inteiro; comparado com o mês antes dele, inteiro */
+  const firstThis = T.slice(0,8)+'01', lmEnd = add(firstThis,-1), lmStart = lmEnd.slice(0,8)+'01';
+  LM = [lmStart, lmEnd]; LMP = [add(lmStart,-1).slice(0,8)+'01', add(lmStart,-1)];
 
   const known = new Set(PRODUCTS.map(p=>p.campaign).concat(ENGAJAMENTO?[ENGAJAMENTO]:[]));
   ACC = { id:'all', camps:Object.keys(M.daily) };
@@ -626,7 +669,7 @@ function setup(){
     p.budgetInfo = !b ? 'sem orçamento ativo' : 'orçamento do conjunto (ABO)'; }
   ACC.budget = Object.values(BUD).reduce((a,x)=>a+x.daily,0);
 
-  vgRange = [add(Y,-13), Y];
+  vgRange = [add(Y,-13), Y]; pRange = vgRange.slice();
   pSel = prods.slice().sort((a,b)=>b.cur.leads-a.cur.leads)[0].id;
 }
 
@@ -716,25 +759,30 @@ function donut(id, data){
     +`<text x="60" y="58" text-anchor="middle" class="d-big">${Math.round(top[1]/total*100)}%</text><text x="60" y="73" text-anchor="middle" class="d-small">${esc(top[0])}</text>`;
   leg.innerHTML=entries.map(([k,v],i)=>`<div class="item"><span class="sw" style="background:${COL[i]}"></span>${esc(k)}<span class="pct">${Math.round(v/total*100)}%</span></div>`).join('');
 }
-function spark(daily){ const mx=Math.max(1,...daily), w=5, g=2, H=24;
-  return `<svg class="spark" viewBox="0 0 ${14*(w+g)} ${H}" width="${14*(w+g)}" height="${H}" aria-hidden="true">`+daily.map((v,i)=>{ const h=v?Math.max(2,v/mx*H):1.5; return `<rect x="${i*(w+g)}" y="${H-h}" width="${w}" height="${h}" rx="1.5" class="${i>=7?'cur':'prev'}"/>`; }).join('')+'</svg>'; }
+/* split = índice onde começa o período escolhido (antes dele, barras cinza do período anterior) */
+function spark(daily, split=0){ daily=daily.slice(-31); const n=daily.length, mx=Math.max(1,...daily), H=24, g=n>14?1:2, w=n>14?Math.max(2,Math.floor(98/n)-g):5;
+  return `<svg class="spark" viewBox="0 0 ${n*(w+g)} ${H}" width="${n*(w+g)}" height="${H}" aria-hidden="true">`+daily.map((v,i)=>{ const h=v?Math.max(2,v/mx*H):1.5; return `<rect x="${i*(w+g)}" y="${H-h}" width="${w}" height="${h}" rx="1" class="${i>=split?'cur':'prev'}"/>`; }).join('')+'</svg>'; }
 
 /* =============== VISÃO GERAL =============== */
-function periodRange(){
-  if (vgPeriod==='cur') return { a:L7[0], b:L7[1], pa:P7[0], pb:P7[1] };
-  if (vgPeriod==='month') return { a:MON[0], b:MON[1], pa:MONP[0], pb:MONP[1] };
-  const [a,b]=vgRange, len=diff(a,b)+1, pa=add(a,-len), ok=pa>=DATA_START;
+function rangeOf(per, rng){
+  if (per==='cur') return { a:L7[0], b:L7[1], pa:P7[0], pb:P7[1] };
+  if (per==='month') return { a:MON[0], b:MON[1], pa:MONP[0], pb:MONP[1] };
+  if (per==='last') return { a:LM[0], b:LM[1], pa:LMP[0], pb:LMP[1] };
+  const [a,b]=rng, len=diff(a,b)+1, pa=add(a,-len), ok=pa>=DATA_START;
   return { a, b, pa:ok?pa:null, pb:ok?add(a,-1):null, len };
 }
-function vgData(e){
-  const R=periodRange(), m=agg(e.camps,R.a,R.b), o=R.pa?agg(e.camps,R.pa,R.pb):null;
+function periodRange(){ return rangeOf(vgPeriod, vgRange); }
+function viewData(e, per, rng){
+  const R=rangeOf(per,rng), m=agg(e.camps,R.a,R.b), o=R.pa?agg(e.camps,R.pa,R.pb):null;
   let days, sel=null;
-  if (vgPeriod==='cur'){ days=ACC.days14; sel=[7,13]; }
-  else if (vgPeriod==='month'){ days=daysIn(R.a,R.b); }
-  else if (cmpOn && R.pa && R.len<=62){ days=daysIn(R.pa,R.b); sel=[R.len,2*R.len-1]; }
+  if (per==='cur'){ days=ACC.days14; sel=[7,13]; }
+  else if (per==='custom' && cmpOn && R.pa && R.len<=62){ days=daysIn(R.pa,R.b); sel=[R.len,2*R.len-1]; }
   else { days=daysIn(R.a,R.b); }
   return { R, m, o, days, sel, series:ser(e.camps,days,3), spend:ser(e.camps,days,0) };
 }
+function vgData(e){ return viewData(e, vgPeriod, vgRange); }
+const PER_TAG={ cur:'7 DIAS', month:'ESTE MÊS', last:'MÊS PASSADO', custom:'PERSONALIZADO' };
+function perText(per, R){ return per==='cur'?'Últimos 7 dias':per==='month'?`${cap1(monthName(MON[0]))}, até ontem`:per==='last'?cap1(monthName(LM[0])):fRange(R.a,R.b); }
 function periodLabel(R, withPrev){
   const base = vgPeriod==='custom' ? fRange(R.a,R.b) : fRange(R.a,R.b)+', sem contar hoje';
   return base + (withPrev&&R.pa ? ' · vs. '+fRange(R.pa,R.pb) : '');
@@ -778,6 +826,7 @@ function renderVG(){
   const c=cpl(m.spend,m.leads), co=o?cpl(o.spend,o.leads):null;
   $('#vg-cpl').textContent=c?brl(c,2):'—'; $('#vg-cpl-d').innerHTML=c&&co?chg(c/co-1,false)+`<span class="prev">${brl(co,2)} antes</span>`:'';
   lineChart($('#vg-chart'), V.series, { sel:V.sel, spend:V.spend, days:V.days });
+  renderSec('vg', m, o); $('#vg-sec-sub').textContent=(isAll?'Todos os conjuntos':e.label)+' · '+perText(vgPeriod,V.R).toLowerCase()+(o?' · variação vs. período anterior':'');
   $('#vg-chart-sub').textContent = (isAll?'Todos os conjuntos':e.label)+' · '+fRange(V.days[0],V.days[V.days.length-1])+(V.sel?' · faixa destacada = período escolhido':'');
   $('#news').classList.toggle('off', !isAll);
   $$('.vg-all').forEach(x=>x.hidden=!isAll);
@@ -809,7 +858,7 @@ function renderRank(all=rankAll){ rankAll=all;
       <span class="r-cpl">${c?brl(c,2):'—'}<small>por lead</small></span>
       <span class="r-cpl r-bud">${p.budget!=null?brl(p.budget):'—'}<small>por dia</small></span>
       <span class="r-go" aria-hidden="true">›</span></button></li>`; }).join('') : '<li><p class="empty">Nenhum gasto no período.</p></li>';
-  $$('#rank button').forEach(b=>b.addEventListener('click',()=>{ const p=byId[b.dataset.id]; if (p.ended){ vgProduct=p.id; $('#vg-product').value=p.id; renderVG(); scrollTo({top:0,behavior:'smooth'}); } else openProduct(p.id); }));
+  $$('#rank button').forEach(b=>b.addEventListener('click',()=>{ openProduct(b.dataset.id, true); }));
   $('#rank-more').hidden=all||list.length<=8; $('#rank-more').innerHTML='Ver todos os '+list.length+' conjuntos <span aria-hidden="true">→</span>';
 }
 /* anúncios de um conjunto de campanhas: junta as listas por campanha e ordena por leads */
@@ -850,7 +899,31 @@ function renderWho(){
   order.forEach(a=>{ if ((B.age||{})[a]) ad[a]=B.age[a]; });
   Object.entries(B.age||{}).forEach(([a,v])=>{ if (!order.includes(a)){ ad['Não informado']=(ad['Não informado']||0)+v; } });
   donut('gender',gd); donut('age',ad);
+  const PLAT={ facebook:'Facebook', instagram:'Instagram', audience_network:'Audience Network', messenger:'Messenger', threads:'Threads', unknown:'Não informado' };
+  const DEV={ mobile_app:'App mobile', mobile_web:'Web mobile', desktop:'Desktop', unknown:'Não informado' };
+  const lab=(map,o)=>{ const r={}; Object.entries(o||{}).forEach(([k,v])=>{ const l=map[k]||k; r[l]=(r[l]||0)+v; }); return r; };
+  donut('platform',lab(PLAT,B.platform)); donut('device',lab(DEV,B.device));
 }
+/* =============== FUNIS EM BLOCOS =============== */
+/* steps: [{l, s, v, r, bg, cls}] — r = texto da pílula entre o bloco anterior e este */
+function vfunnel(el, steps){
+  el.innerHTML=steps.map((x,i)=>(i?`<div class="vf-gap"><span class="${x.r?'':'none'}">${x.r||'—'}</span></div>`:'')
+    +`<div class="vf-step ${x.cls||''}${x.v?'':' zero'}" style="--i:${i};${x.bg?'background:'+x.bg:''}"><span class="l">${esc(x.l)}${x.s?`<small>${esc(x.s)}</small>`:''}</span><span class="v">${int(x.v)}</span></div>`).join('');
+}
+const rate=(a,b)=>b>0?(a/b*100).toLocaleString('pt-BR',{maximumFractionDigits:2})+'%':'';
+/* CPM, CPC e CTR do link + Impressões → Cliques → Leads (como no painel da ABC) */
+function renderSec(pre, m, o){
+  const cpm=m.impr?m.spend/m.impr*1000:null, cpc=m.clicks?m.spend/m.clicks:null, ctr=m.impr?m.clicks/m.impr:null;
+  const ocpm=o&&o.impr?o.spend/o.impr*1000:null, ocpc=o&&o.clicks?o.spend/o.clicks:null, octr=o&&o.impr?o.clicks/o.impr:null;
+  $('#'+pre+'-cpm').textContent=cpm!=null?brl(cpm,2):'—'; $('#'+pre+'-cpc').textContent=cpc!=null?brl(cpc,2):'—'; $('#'+pre+'-ctr').textContent=ctr!=null?pct2(ctr):'—';
+  $('#'+pre+'-cpm-d').innerHTML=cpm&&ocpm?chg(cpm/ocpm-1,false):''; $('#'+pre+'-cpc-d').innerHTML=cpc&&ocpc?chg(cpc/ocpc-1,false):''; $('#'+pre+'-ctr-d').innerHTML=ctr&&octr?chg(ctr/octr-1,true):'';
+  vfunnel($('#'+pre+'-vf'), [
+    { l:'Impressões', v:m.impr },
+    { l:'Cliques no link', v:m.clicks, r:rate(m.clicks,m.impr) },
+    { l:'Leads', v:m.leads, r:rate(m.leads,m.clicks), bg:'var(--pink)' },
+  ]);
+}
+
 /* =============== FUNIL COMERCIAL (Meta → RD Station CRM) ===============
    Leads gerados = leads de formulário do Meta no período (conta inteira).
    Demais etapas = negócios da campanha "LUZIAC - Leads" no RD que ENTRARAM no período e
@@ -862,62 +935,75 @@ function crmAgg(a,b){ if (!CRM||!CRM.daily) return null;
   for (const d in CRM.daily) if (d>=a && d<=b) CRM.daily[d].forEach((v,i)=>tot[i]+=v||0);
   for (const d in (CRM.status||{})) if (d>=a && d<=b) CRM.status[d].forEach((v,i)=>st[i]+=v||0);
   return { tot, st }; }
+const mix=(a,b,t)=>'#'+[0,2,4].map(k=>Math.round(parseInt(a.substr(k+1,2),16)*(1-t)+parseInt(b.substr(k+1,2),16)*t).toString(16).padStart(2,'0')).join('');
 function renderCrm(){
-  const R=periodRange(), m=agg(ACC.camps,R.a,R.b), c=crmAgg(R.a,R.b);
-  const when = vgPeriod==='cur'?'Últimos 7 dias':vgPeriod==='month'?`${cap1(monthName(MON[0]))}, até ontem`:fRange(R.a,R.b);
+  const R=periodRange(), m=agg(ACC.camps,R.a,R.b), c=crmAgg(R.a,R.b), when=perText(vgPeriod,R);
   $('#crm-sub').textContent = when+' · leads que entraram no RD no período e até onde chegaram';
-  const st=['#st-open','#st-lost','#st-won','#st-adv'];
-  $('#st-sub').textContent = 'Situação hoje no RD dos leads que entraram · '+when.toLowerCase();
-  if (!c){ $('#crm-funnel').innerHTML='<li><p class="empty">Funil do RD Station CRM ainda não carregou.</p></li>'; $('#crm-note').textContent=''; st.forEach(s=>$(s).textContent='—'); return; }
-  const rows=[{ n:'Leads gerados', s:'formulário Meta', v:m.leads, cls:'meta' }]
-    .concat(CRM.stages.map((lab,i)=>({ n:lab, s:i===0?'campanha LUZIAC - Leads':'', v:c.tot[i], cls:lab==='Venda'?'won':'rd' })));
-  const mx=Math.max(1,...rows.map(r=>r.v));
-  $('#crm-funnel').innerHTML=rows.map((r,i)=>{ const pv=i?rows[i-1].v:0;
-    return `<li class="${r.cls}${r.v?'':' zero'}"><span class="cf-name">${esc(r.n)}${r.s?`<small>${esc(r.s)}</small>`:''}</span>
-      <span class="cf-bar"><span style="width:${(r.v/mx*100).toFixed(2)}%"></span></span>
-      <span class="cf-n">${int(r.v)}</span>
-      <span class="cf-p">${i&&pv?(r.v/pv*100).toLocaleString('pt-BR',{maximumFractionDigits:1})+'%':'—'}</span>
-      <span class="cf-c">${r.v?brl(m.spend/r.v,2):'—'}</span></li>`; }).join('');
-  $('#crm-note').textContent='Custo por etapa = investimento no Meta no período ÷ quantidade da etapa.';
+  const st=['#st-open','#st-lost','#st-won','#st-adv','#st-cvp'];
+  if (!c){ $('#crm-funnel').innerHTML='<p class="empty">Funil do RD Station CRM ainda não carregou.</p>'; $('#crm-note').textContent=''; st.forEach(x=>$(x).textContent='—'); return; }
+  const n=CRM.stages.length;
+  const steps=[{ l:'Leads gerados', s:'formulário Meta'+(m.leads?' · '+brl(m.spend/m.leads,2)+' cada':''), v:m.leads, bg:'#3A0A1F' }]
+    .concat(CRM.stages.map((lab,i)=>{ const v=c.tot[i], won=lab==='Venda';
+      return { l:lab, s:(i===0?'campanha LUZIAC - Leads · ':'')+(v?brl(m.spend/v,2)+' por '+(i===0?'lead':'etapa'):''), v,
+        r:rate(v, i?c.tot[i-1]:m.leads), cls:won?'won':'', bg:won?'':mix('#5E0A2E','#FB2576',(i)/(n-2)) }; }));
+  vfunnel($('#crm-funnel'), steps);
+  $('#crm-note').textContent='Cada etapa conta quem chegou até ela no período (quem está em COF Enviada também conta em VP Agendada). Custo = investimento no Meta no período ÷ quantidade da etapa. A pílula mostra a passagem da etapa anterior.';
   const [ab,pe,ga]=c.st, tot=c.tot[0];
+  $('#st-sub').textContent='SITUAÇÃO HOJE NO RD · '+when.toUpperCase();
   $('#st-open').textContent=int(ab); $('#st-lost').textContent=int(pe); $('#st-won').textContent=int(ga);
-  $('#st-adv').textContent=tot?int(c.tot[1])+' · '+(c.tot[1]/tot*100).toLocaleString('pt-BR',{maximumFractionDigits:1})+'%':'—';
+  $('#st-adv').textContent=tot?int(c.tot[1])+' · '+rate(c.tot[1],tot):'—';
+  $('#st-cvp').textContent=c.tot[2]?brl(m.spend/c.tot[2],2):'—';
 }
 
-function renderEng(){
-  const k=vgPeriod==='month'?'month':'last7', E=(M.engagement||{})[k]||{};
-  $('#eng-sub').textContent='Quem conheceu os empreendimentos pelo Instagram · '+(k==='month'?`${monthName(MON[0])}, até ontem`:'7 dias');
-  $('#eng-reach').textContent=E.reach?int(E.reach):'—'; $('#eng-video').textContent=E.spend?int(E.videoViews):'—';
-  $('#eng-react').textContent=E.spend?int(E.reactions):'—'; $('#eng-cpm').textContent=E.reach?brl(E.spend/E.reach*1000,2):'—';
-}
 
 /* =============== CONJUNTOS =============== */
 const norm = s => s.toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu,'');
+/* lista do período: ativos primeiro; encerrados só se tiveram gasto ou leads no período */
+function pRows(){
+  const R=rangeOf(pPeriod,pRange), q=norm(pSearch.trim());
+  const rows=ents.map(p=>({p, m:agg(p.camps,R.a,R.b)})).filter(x=>(!x.p.ended || x.m.spend>0 || x.m.leads>0) && norm(x.p.label).includes(q));
+  const by=(a,b)=>b.m.leads-a.m.leads||b.m.spend-a.m.spend;
+  return { R, act:rows.filter(x=>!x.p.ended).sort(by), end:rows.filter(x=>x.p.ended).sort(by) };
+}
 function renderProdList(){
-  const q=norm(pSearch.trim());
-  const list=prods.filter(p=>norm(p.label).includes(q)).sort((a,b)=>b.cur.leads-a.cur.leads);
-  $('#p-list').innerHTML=list.length?list.map(p=>`<button type="button" class="pitem ${p.id===pSel?'sel':''}" data-id="${p.id}" aria-pressed="${p.id===pSel}">
-      <span class="pi-name">${esc(p.label)}</span><span class="pi-meta"><b>${p.cur.leads}</b> leads · ${p.c7?brl(p.c7)+' por lead':'sem leads'}</span>${spark(p.daily)}</button>`).join('')
-    : '<p class="empty">Nenhum conjunto encontrado.</p>';
+  const { R, act, end }=pRows(), all=act.concat(end);
+  if (all.length && !all.some(x=>x.p.id===pSel)) pSel=all[0].p.id;
+  const days = pPeriod==='cur' ? ACC.days14 : daysIn(R.a,R.b), split = pPeriod==='cur' ? 7 : 0;
+  const item=({p,m})=>{ const c=cpl(m.spend,m.leads);
+    return `<button type="button" class="pitem ${p.ended?'ended':''} ${p.id===pSel?'sel':''}" data-id="${p.id}" aria-pressed="${p.id===pSel}">
+      <span class="pi-name">${p.ended?'':'<span class="on" title="ativo"></span>'}${esc(p.label)}</span>
+      <span class="pi-meta">${p.ended?'<span class="r-tag" style="margin:0 6px 0 0">encerrado</span>':''}<b>${int(m.leads)}</b> leads · ${c?brl(c)+' por lead':'sem leads'}</span>${spark(ser(p.camps,days,3), split)}</button>`; };
+  $('#p-list').innerHTML = all.length
+    ? act.map(item).join('') + (end.length?`<div class="p-sep mono">ENCERRADOS</div>`+end.map(item).join(''):'')
+    : '<p class="empty">Nenhum conjunto com dados neste período.</p>';
   $$('#p-list .pitem').forEach(b=>b.addEventListener('click',()=>{ pSel=b.dataset.id; renderProdList(); renderProdDetail(); if (innerWidth<900) $('#p-detail').scrollIntoView({behavior:'smooth',block:'start'}); }));
 }
 function renderProdDetail(){
-  const p=byId[pSel], m=p.cur, o=p.prev;
-  $('#pd-name').textContent=p.label; $('#pd-camps').textContent=fRange(L7[0],L7[1]);
-  $('#pd-leads').textContent=int(m.leads); $('#pd-leads-d').innerHTML=o.leads?chg(m.leads/o.leads-1,true)+`<span class="prev">${o.leads} antes</span>`:(o.spend?'<span class="prev">0 antes</span>':'<span class="prev">campanha nova</span>');
-  $('#pd-spend').textContent=brl(m.spend); $('#pd-spend-d').innerHTML=o.spend?chg(m.spend/o.spend-1,null)+`<span class="prev">${brl(o.spend)} antes</span>`:'';
-  $('#pd-budget').textContent=p.budget!=null?brl(p.budget):'—'; $('#pd-budget-d').textContent=p.budgetInfo;
-  $('#pd-cpl').textContent=p.c7?brl(p.c7,2):'—'; $('#pd-cpl-d').innerHTML=p.c7&&p.cp?chg(p.c7/p.cp-1,false)+`<span class="prev">${brl(p.cp,2)} antes</span>`:'';
-  if (!cmpOn) ['#pd-leads-d','#pd-spend-d','#pd-cpl-d'].forEach(s=>$(s).innerHTML='');
-  lineChart($('#pd-chart'), p.daily, { sel:[7,13], days:ACC.days14, spend:ser(p.camps,ACC.days14,0) });
-  $('#pd-chart-sub').textContent=fRange(ACC.days14[0],ACC.days14[13])+' · faixa destacada = últimos 7 dias';
-  $('#pd-ads').innerHTML=adsHTML(adsFor(p.camps,'last7').slice(0,3), false)||EMPTY_ADS;
-  $('#pd-f-impr').textContent=int(m.impr); $('#pd-f-clicks').textContent=int(m.clicks); $('#pd-f-leads').textContent=int(m.leads);
-  $('#pd-f-p1').textContent=m.impr?pct2(m.clicks/m.impr)+' clicaram':''; $('#pd-f-p2').textContent=m.clicks?pct2(m.leads/m.clicks)+' viraram lead':'';
+  const p=byId[pSel]; if (!p) return;
+  const V=viewData(p,pPeriod,pRange), m=V.m, o=cmpOn?V.o:null;
+  $('#pd-name').innerHTML=esc(p.label)+(p.ended?' <span class="r-tag">encerrado</span>':'');
+  $('#pd-per').textContent=PER_TAG[pPeriod]; $('#pd-camps').textContent=fRange(V.R.a,V.R.b);
+  $('#pd-leads').textContent=int(m.leads);
+  $('#pd-leads-d').innerHTML=!o?'':o.leads?chg(m.leads/o.leads-1,true)+`<span class="prev">${int(o.leads)} antes</span>`:(o.spend?'<span class="prev">0 antes</span>':'<span class="prev">sem dados antes</span>');
+  $('#pd-spend').textContent=brl(m.spend); $('#pd-spend-d').innerHTML=o&&o.spend?chg(m.spend/o.spend-1,null)+`<span class="prev">${brl(o.spend)} antes</span>`:'';
+  const c=cpl(m.spend,m.leads), co=o?cpl(o.spend,o.leads):null;
+  $('#pd-cpl').textContent=c?brl(c,2):'—'; $('#pd-cpl-d').innerHTML=c&&co?chg(c/co-1,false)+`<span class="prev">${brl(co,2)} antes</span>`:'';
+  $('#pd-budget').textContent=!p.ended&&p.budget!=null?brl(p.budget):'—'; $('#pd-budget-d').textContent=p.ended?'conjunto encerrado':p.budgetInfo;
+  lineChart($('#pd-chart'), V.series, { sel:V.sel, days:V.days, spend:V.spend });
+  $('#pd-chart-sub').textContent=fRange(V.days[0],V.days[V.days.length-1])+(V.sel?' · faixa destacada = período escolhido':'');
+  const key = pPeriod==='cur'?'last7':pPeriod==='month'?'month':null;
+  $('#pd-ads-sub').textContent=perText(pPeriod,V.R)+' · o mesmo anúncio em públicos diferentes aparece somado';
+  $('#pd-ads').innerHTML = key ? (adsHTML(adsFor(p.camps,key).slice(0,3), false)||EMPTY_ADS)
+    : '<p class="empty ads-empty">O ranking de criativos fica disponível em “Últimos 7 dias” e “Este mês”.</p>';
+  renderSec('pd', m, o); $('#pd-sec-sub').textContent=perText(pPeriod,V.R)+(o?' · variação vs. período anterior':'');
 }
+function setPPeriod(per){ pPeriod=per; $$('#p-periods .seg-btn').forEach(x=>x.classList.toggle('active',x.dataset.p===per)); $('#p-custom').hidden=per!=='custom'; }
 function setTab(t){ $$('.tab-btn').forEach(b=>{ const on=b.dataset.tab===t; b.classList.toggle('active',on); b.setAttribute('aria-selected',on); });
   $$('.tab-panel').forEach(p=>p.classList.toggle('active',p.dataset.panel===t)); }
-function openProduct(id){ pSel=id; pSearch=''; $('#p-search').value=''; setTab('produtos'); renderProdList(); renderProdDetail(); scrollTo({top:$('.prod-layout').offsetTop-20,behavior:'smooth'}); }
+function openProduct(id, fromVG){
+  /* vindo do ranking da Visão geral, abre no mesmo período que estava lá */
+  if (fromVG){ pRange=vgRange.slice(); $('#p-from').value=pRange[0]; $('#p-to').value=pRange[1]; setPPeriod(vgPeriod); }
+  pSel=id; pSearch=''; $('#p-search').value=''; setTab('produtos'); renderProdList(); renderProdDetail(); scrollTo({top:$('.prod-layout').offsetTop-20,behavior:'smooth'}); }
 
 /* =============== início =============== */
 function init(data){
@@ -937,11 +1023,17 @@ function init(data){
     f=f<DATA_START?DATA_START:f>Y?Y:f; t=t<DATA_START?DATA_START:t>Y?Y:t;
     if (f>t){ [f,t]=[t,f]; } from.value=f; to.value=t; vgRange=[f,t]; renderVG(); };
   from.addEventListener('change',readRange); to.addEventListener('change',readRange);
-  $$('.cmp-input').forEach(i=>i.addEventListener('change',()=>{ cmpOn=i.checked; $$('.cmp-input').forEach(x=>x.checked=cmpOn); renderVG(); renderProdDetail(); }));
+  $$('.cmp-input').forEach(i=>i.addEventListener('change',()=>{ cmpOn=i.checked; $$('.cmp-input').forEach(x=>x.checked=cmpOn); renderVG(); renderProdList(); renderProdDetail(); }));
   $('#vg-clear').addEventListener('click',()=>{ vgProduct='all'; vgPeriod='cur'; $('#vg-product').value='all';
     $$('#vg-periods .seg-btn').forEach(x=>x.classList.toggle('active',x.dataset.p==='cur')); $('#vg-custom').hidden=true; renderVG(); });
   $('#rank-more').addEventListener('click',()=>renderRank(true));
   $('#p-search').addEventListener('input',ev=>{ pSearch=ev.target.value; renderProdList(); });
+  $$('#p-periods .seg-btn').forEach(b=>b.addEventListener('click',()=>{ setPPeriod(b.dataset.p); renderProdList(); renderProdDetail(); }));
+  const pf=$('#p-from'), pt=$('#p-to'); [pf,pt].forEach(i=>{ i.min=DATA_START; i.max=Y; }); pf.value=pRange[0]; pt.value=pRange[1];
+  const readP=()=>{ let f=pf.value, t=pt.value; if (!f||!t) return;
+    f=f<DATA_START?DATA_START:f>Y?Y:f; t=t<DATA_START?DATA_START:t>Y?Y:t;
+    if (f>t){ [f,t]=[t,f]; } pf.value=f; pt.value=t; pRange=[f,t]; renderProdList(); renderProdDetail(); };
+  pf.addEventListener('change',readP); pt.addEventListener('change',readP);
 
   renderSaldo(); renderNews(); renderAds(); renderVG(); renderProdList(); renderProdDetail();
 }
