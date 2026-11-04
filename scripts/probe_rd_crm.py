@@ -111,3 +111,13 @@ print(status, [s.get("name") for s in (srcs.get("deal_sources", []) if isinstanc
 status, camps = get("/campaigns")
 section("CAMPANHAS CADASTRADAS")
 print(status, [s.get("name") for s in (camps.get("campaigns", []) if isinstance(camps, dict) else [])][:50])
+
+section("SÓ 'LUZIAC - Leads': etapa x win x fechado")
+lz = [d for d in deals if nm(d.get("campaign")) == "LUZIAC - Leads"]
+print(Counter((nm(d.get("deal_stage")), str(d.get("win")), bool(d.get("closed_at")), bool(d.get("hold"))) for d in lz).most_common(40))
+section("SÓ 'LUZIAC - Leads': mês de criação")
+print(sorted(Counter((d.get("created_at") or "")[:7] for d in lz).items()))
+section("SÓ 'LUZIAC - Leads': origem")
+print(Counter(nm(d.get("deal_source")) for d in lz))
+section("rating / markup em LUZIAC")
+print(Counter(str(d.get("rating")) for d in lz), Counter(str(d.get("markup")) for d in lz))
