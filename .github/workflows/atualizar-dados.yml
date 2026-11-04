@@ -35,15 +35,15 @@ jobs:
           RD_CRM_TOKEN: ${{ secrets.RD_CRM_TOKEN }}
         run: python scripts/fetch_rd_crm.py
 
-      - name: Commitar data.json se mudou
+      - name: Commitar dados se mudaram
         run: |
           git config user.name "painel-bot"
           git config user.email "painel-bot@users.noreply.github.com"
-          git add metrics.json crm.json 2>/dev/null || git add metrics.json
+          git add -A metrics.json crm.json assets/
           if git diff --cached --quiet; then
             echo "Sem mudanças nos dados."
           else
             git commit -m "Atualiza dados (Windsor.ai + RD CRM)"
-            git pull --rebase -q || true
+            git pull --rebase
             git push
           fi
